@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Google Maps API</title>
+	<style>
+		#map
+		{
+			height: 400px;
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	
+	<h1>Learning Google Maps</h1>
+	<div id="map"></div>
+
+	<script>
+		function initMap()
+		{
+			// Create options, zoom level and the map place
+			var options = {
+				zoom: 14,
+				center: {
+					lat: 40.1792,
+					lng: 44.4991
+				}
+			}
+
+			// Create new map object. Get the div and pass the options
+			var map = new google.maps.Map(
+				document.getElementById("map"),
+				options
+			);
+
+			// Listen for click on map
+			google.maps.event.addListener(map, "click", function(event){
+				// Add marker
+				addMarker({coords: event.latLng})
+			})
+			
+			// Array of Markers
+			var markers = [
+				{
+					coords:{lat:40.200012,lng:44.566527},
+					iconImage: "http://www.myiconfinder.com/uploads/iconsets/256-256-a5485b563efc4511e0cd8bd04ad0fe9e.png", 
+					content: "<h1> Masivnoc </h2>"
+				},
+
+				{
+					coords: {lat: 40.200209, lng: 44.565570}
+				},
+			];
+
+			// Loop through markers
+			for (var i = 0; i < markers.length; i++){
+				addMarker(markers[i]);
+			}
+
+			// Add marker function
+			function addMarker(props)
+			{
+				var marker = new google.maps.Marker({
+					position:props.coords,
+					map: map,
+					// icon: props.iconImage
+				});
+
+				// Check for custom icon
+				if(props.iconImage){
+					// Set icon image
+					marker.setIcon(props.iconImage);
+				}
+
+				// Check for content
+				if(props.content){
+					// Add popup
+					var InfoWindow = new google.maps.InfoWindow({
+						content: props.content
+					})
+
+					// Action on click
+					marker.addListener("click", function(){
+						InfoWindow.open(map, marker)
+					})
+				}
+			}
+		}
+	</script>
+	
+	<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDb2wsIP9uKsYEKYC8SGa-80iX3wZs4Ieo&callback=initMap">
+    </script>
+</body>
+</html>
